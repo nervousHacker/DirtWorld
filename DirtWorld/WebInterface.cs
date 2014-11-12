@@ -13,8 +13,9 @@ namespace DirtWorld
 	public class WebInterface : NancyModule
 	{
 		private static Server server;
-		private string ServerDirectory;
-		private string JarDirectory;
+		private static string serverDirectory;
+		private static string jarDirectory;
+		private static string defaultJarUrl = "https://s3.amazonaws.com/Minecraft.Download/versions/1.8/minecraft_server.1.8.jar";
 
 		public WebInterface ()
 		{
@@ -26,13 +27,13 @@ namespace DirtWorld
 			};
 
 			Get ["/start"] = parameters => {
-				StartServer ();
+				//StartServer ();
 				//CreateServerDirectory();
 				return "starting up";
 			};
 
 			Get ["/getjar"] = parameters => {
-				DownloadServerJar("");
+				DownloadServerJar(defaultJarUrl);
 				//CreateServerDirectory();
 				return "got it";
 			};
@@ -44,18 +45,18 @@ namespace DirtWorld
 			};
 
 			Get ["/create/{name}"] = parameters => {
-				var serv = new Server (CreateServerDirectory(parameters.name));
-				serv.Name = parameters.name;
-				serv.SetEula (true);
+				server = new Server (CreateServerDirectory(parameters.name));
+				server.Name = parameters.name;
+				server.SetEula (true);
 
-				serv.DataReceived += (sender, args) => {
+				server.DataReceived += (sender, args) => {
 					Console.WriteLine(args.Data);
 				};
 				return "starting up";
 			};
 
 			Get ["/stop"] = parameters => {
-				StopServer ();
+				//StopServer ();
 				return "stopping server";
 			};
 
@@ -64,25 +65,22 @@ namespace DirtWorld
 			};
 		}
 
-		// jar url
-		// https://s3.amazonaws.com/Minecraft.Download/versions/1.8/minecraft_server.1.8.jar
 
 		private DirectoryInfo[] GetExistingServers ()
 		{
-			var di = new DirectoryInfo (ServerDirectory);
+			var di = new DirectoryInfo (serverDirectory);
 			return di.GetDirectories ();
 		}
 
 		private FileInfo[] GetExistingJars ()
 		{
-			var di = new DirectoryInfo (JarDirectory);
+			var di = new DirectoryInfo (jarDirectory);
 			return di.GetFiles ();
 		}
 
 		private void DownloadServerJar(string jarUrl){
-			jarUrl = "https://s3.amazonaws.com/Minecraft.Download/versions/1.8/minecraft_server.1.8.jar";
 			using (var wc = new WebClient ()) {
-				wc.DownloadFile(jarUrl, JarDirectory + "/" + jarUrl.Substring(jarUrl.LastIndexOf('/')));
+				wc.DownloadFile(jarUrl, jarDirectory + "/" + jarUrl.Substring(jarUrl.LastIndexOf('/')));
 			}
 		}
 
@@ -102,8 +100,8 @@ namespace DirtWorld
 
 		private void SetUpDirectories ()
 		{
-			this.ServerDirectory = Directory.CreateDirectory (GetHomePath () + "/minecraft_servers").FullName;
-			this.JarDirectory = Directory.CreateDirectory (this.ServerDirectory + "/server_jars").FullName;
+			serverDirectory = Directory.CreateDirectory (GetHomePath () + "/minecraft_servers").FullName;
+			jarDirectory = Directory.CreateDirectory (serverDirectory + "/server_jars").FullName;
 		}
 
 		public string CreateServerDirectory (string serverName)
@@ -115,31 +113,6 @@ namespace DirtWorld
 		static void DataReceived(object sender, EventArgs e)
 		{
 			Console.WriteLine ("got me some data");
-		}
-
-		static Process serverProcess;
-
-		public void StartServer ()
-		{
-			serverProcess = new Process ();
-			serverProcess.StartInfo.WorkingDirectory = "/Users/stum/Downloads/";
-			serverProcess.StartInfo.FileName = "java";
-			serverProcess.StartInfo.Arguments = "-jar -Xmx1024M -Xms1024M minecraft_server.1.8.jar nogui";
-			serverProcess.StartInfo.UseShellExecute = false;
-			serverProcess.StartInfo.RedirectStandardOutput = true;
-			serverProcess.StartInfo.RedirectStandardInput = true;
-			serverProcess.OutputDataReceived += (sender, args) => Console.WriteLine ("received output: {0}", args.Data);
-			serverProcess.Start ();
-			serverProcess.BeginOutputReadLine ();
-
-		}
-
-		public void StopServer ()
-		{
-			var input = serverProcess.StandardInput;
-			input.WriteLine ("stop");
-			serverProcess.Close ();
-			serverProcess.Dispose ();
 		}
 	}
 }

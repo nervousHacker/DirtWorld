@@ -12,15 +12,17 @@ namespace DirtWorld
 
 		protected virtual void OnDataReceived (DataReceivedEventArgs e)
 		{
-			DataReceived(this, e);
+			DataReceived (this, e);
 		}
 
 		protected virtual void OnErrorReceived (DataReceivedEventArgs e)
 		{
-			ErrorReceived(this, e);
+			ErrorReceived (this, e);
 		}
 
 		#region Properties
+
+		public Process Process { get; set; }
 
 		public string Name { get; set; }
 
@@ -44,29 +46,46 @@ namespace DirtWorld
 
 		#region Methods
 
-		public void CreateBackup ()
+		public void Start ()
 		{
-			// check out sharpziplib
+			this.Process = new Process ();
+			this.Process.StartInfo.WorkingDirectory = this.Directory;
+			this.Process.StartInfo.FileName = "java";
+			this.Process.StartInfo.Arguments = String.Format ("-jar -Xmx{0}M -Xms{1}M {3} {4}",
+				this.MaxMemory, this.InitialMemory, this.Jar, this.Gui);
+
+			this.Process.StartInfo.UseShellExecute = false;
+
+			this.Process.StartInfo.RedirectStandardOutput = true;
+			this.Process.StartInfo.RedirectStandardInput = true;
+			this.Process.StartInfo.RedirectStandardError = true;
+			this.Process.ErrorDataReceived += ErrorReceived;
+			this.Process.OutputDataReceived += DataReceived;
+
+			this.IsRunning = this.Process.Start ();
+
+			this.Process.BeginOutputReadLine ();
+			this.Process.BeginErrorReadLine ();
 		}
 
-		public bool Start ()
+		public void Stop ()
 		{
-			return true;
+			this.Process.StandardInput.WriteLine ("stop");
+			this.Process.Close ();
+			this.Process.Dispose ();
+
+			this.IsRunning = this.Process.HasExited;
 		}
 
-		public bool Stop ()
+		public void Restart ()
 		{
-			return true;
-		}
-
-		public bool Restart ()
-		{
-			return true;
+			Stop ();
+			Start ();
 		}
 
 		public void Backup ()
 		{
-
+			// check out sharpziplib
 		}
 
 		public void SetEula (bool agree)
@@ -100,6 +119,10 @@ namespace DirtWorld
 			this.Properties.Save (this.Directory);
 		}
 
+		public void SendCommand()
+		{
+
+		}
 		#endregion
 
 		#region Constructors

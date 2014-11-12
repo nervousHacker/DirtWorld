@@ -1,0 +1,9 @@
+E:\DirtWorld\DirtWorld\DirtWorld\obj\x86\Debug\DirtWorld.exe
+E:\DirtWorld\DirtWorld\DirtWorld\obj\x86\Debug\DirtWorld.csprojResolveAssemblyReference.cache
+E:\DirtWorld\DirtWorld\DirtWorld\bin\Debug\DirtWorld.exe
+E:\DirtWorld\DirtWorld\DirtWorld\bin\Debug\DirtWorld.pdb
+E:\DirtWorld\DirtWorld\DirtWorld\bin\Debug\Nancy.dll
+E:\DirtWorld\DirtWorld\DirtWorld\bin\Debug\Nancy.Hosting.Self.dll
+E:\DirtWorld\DirtWorld\DirtWorld\bin\Debug\Nancy.xml
+E:\DirtWorld\DirtWorld\DirtWorld\bin\Debug\Nancy.Hosting.Self.xml
+E:\DirtWorld\DirtWorld\DirtWorld\obj\x86\Debug\DirtWorld.pdb

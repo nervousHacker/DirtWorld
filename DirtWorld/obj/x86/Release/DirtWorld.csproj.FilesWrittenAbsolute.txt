@@ -1,0 +1,15 @@
+/Users/stum/Projects/DirtWorld/DirtWorld/obj/x86/Release/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/stum/Projects/DirtWorld/DirtWorld/bin/Release/DirtWorld.exe.mdb
+/Users/stum/Projects/DirtWorld/DirtWorld/bin/Release/DirtWorld.exe
+/Users/stum/Projects/DirtWorld/DirtWorld/obj/x86/Release/DirtWorld.exe
+/Users/stum/Projects/DirtWorld/DirtWorld/obj/x86/Release/DirtWorld.exe.mdb
+/Users/stum/Projects/DirtWorld/DirtWorld/bin/Release/Nancy.dll
+/Users/stum/Projects/DirtWorld/DirtWorld/bin/Release/Nancy.Hosting.Self.dll
+/Users/stum/Projects/DirtWorld/DirtWorld/obj/x86/Release/DirtWorld.Content.index.html
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/obj/x86/Release/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/obj/x86/Release/DirtWorld.exe
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/obj/x86/Release/DirtWorld.exe.mdb
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/bin/Release/Nancy.dll
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/bin/Release/Nancy.Hosting.Self.dll
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/bin/Release/DirtWorld.exe.mdb
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/bin/Release/DirtWorld.exe

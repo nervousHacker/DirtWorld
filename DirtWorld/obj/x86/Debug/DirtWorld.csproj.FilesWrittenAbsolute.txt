@@ -1,0 +1,8 @@
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/bin/Debug/DirtWorld.exe.mdb
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/bin/Debug/DirtWorld.exe
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/obj/x86/Debug/DirtWorld.exe
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/obj/x86/Debug/DirtWorld.exe.mdb
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/bin/Debug/Nancy.dll
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/bin/Debug/Nancy.Hosting.Self.dll
+/Volumes/THUMB/DirtWorld/DirtWorld/DirtWorld/bin/Debug/ICSharpCode.SharpZipLib.dll

@@ -7,18 +7,24 @@ namespace DirtWorld
 {
 	public class Server
 	{
-		public event DataReceivedEventHandler DataReceived = delegate {};
-		public event DataReceivedEventHandler ErrorReceived = delegate {};
+		#region Event Handlers
+		public event DataReceivedEventHandler DataReceived;
+		public event DataReceivedEventHandler ErrorReceived;
 
 		protected virtual void OnDataReceived (DataReceivedEventArgs e)
 		{
-			DataReceived (this, e);
+			if (DataReceived != null) {
+				DataReceived (this, e);
+			}
 		}
 
 		protected virtual void OnErrorReceived (DataReceivedEventArgs e)
 		{
-			ErrorReceived (this, e);
+			if (ErrorReceived != null) {
+				ErrorReceived (this, e);
+			}
 		}
+		#endregion
 
 		#region Properties
 
@@ -119,10 +125,11 @@ namespace DirtWorld
 			this.Properties.Save (this.Directory);
 		}
 
-		public void SendCommand()
+		public void SendCommand ()
 		{
 
 		}
+
 		#endregion
 
 		#region Constructors

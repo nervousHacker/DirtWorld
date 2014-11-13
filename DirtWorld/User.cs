@@ -7,11 +7,11 @@ namespace DirtWorld
 	{
 		#region Properties
 
-		public string Uuid{ get; private set; }
+		public string Uuid{ get; set; }
 
-		public string Name{ get; private set; }
+		public string Name{ get; set; }
 
-		public bool Legacy{ get; private set; }
+		public bool Legacy{ get; set; }
 
 		#endregion
 
@@ -26,12 +26,17 @@ namespace DirtWorld
 			return profile;
 		}
 
+		public string ToJson(){
+			return new Nancy.Json.JavaScriptSerializer().Serialize(this);
+		}
+
 		#endregion
 
 		#region Constructors
 
 		public User (string name)
 		{
+			this.Name = name;
 		}
 
 		#endregion

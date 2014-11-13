@@ -7,6 +7,7 @@ using Nancy.ModelBinding;
 using Microsoft.CSharp;
 using System.Collections.Generic;
 using System.Linq;
+using System.Dynamic;
 
 namespace DirtWorld
 {
@@ -17,37 +18,51 @@ namespace DirtWorld
 		private static string jarDirectory;
 		private static string defaultJarUrl = "https://s3.amazonaws.com/Minecraft.Download/versions/1.8/minecraft_server.1.8.jar";
 
-		public WebInterface ()
+		public WebInterface()
 		{
-			SetUpDirectories ();
+			SetUpDirectories();
 
-			Get ["/{name?}"] = parameters => {
-				System.GC.GetTotalMemory (false);
-				return "Welcome to DirtWorld " + parameters.name;
+			Get["/{name?}"] = parameters => {
+				var u = new User("jimmy"){Uuid = "test-uuid", Legacy = true};
+				return "Welcome to DirtWorld " + parameters.name + 
+					"\nUser: " + u.ToJson();
 			};
 
-			Get ["/start"] = parameters => {
+			Get["/start"] = parameters => {
 				//StartServer ();
 				//CreateServerDirectory();
 				return "starting up";
 			};
 
-			Get ["/getjar"] = parameters => {
+			Get["/getjar"] = parameters => {
 				DownloadServerJar(defaultJarUrl);
 				//CreateServerDirectory();
 				return "got it";
 			};
 
-			Get ["/jars"] = parameters => {
-				var jars = GetExistingJars().Select(x=> x.Name);
+			Get["/jars"] = parameters => {
+				var wl = new UserList(serverDirectory + "/test.list");
+				dynamic user = new ExpandoObject();
+				user.name = "bob";
+				user.uuid = "sljflskfjk";
+					user.legacy = true;
+				wl.AddUser(user);
+
+				var jars = GetExistingJars().Select(x => x.Name);
 
 				return Response.AsJson(jars, Nancy.HttpStatusCode.OK);
 			};
 
-			Get ["/create/{name}"] = parameters => {
-				server = new Server (CreateServerDirectory(parameters.name));
+			Get["/create/{name}"] = parameters => {
+				if (GetExistingServers().Count(x => x.Name == parameters.name) > 0) {
+					// server with that name already exists.
+					// delete existing server to create a new server with the same name.
+					// return the message.
+				}
+
+				server = new Server(serverDirectory);
 				server.Name = parameters.name;
-				server.SetEula (true);
+				server.SetEula(true);
 
 				server.DataReceived += (sender, args) => {
 					Console.WriteLine(args.Data);
@@ -55,64 +70,54 @@ namespace DirtWorld
 				return "starting up";
 			};
 
-			Get ["/stop"] = parameters => {
+			Get["/stop"] = parameters => {
 				//StopServer ();
 				return "stopping server";
 			};
 
-			Get ["/test"] = parameters => {
-				return Response.AsFile ("Content/index.html");
+			Get["/test"] = parameters => {
+				return Response.AsFile("Content/index.html");
 			};
 		}
 
-
-		private DirectoryInfo[] GetExistingServers ()
+		private DirectoryInfo[] GetExistingServers()
 		{
-			var di = new DirectoryInfo (serverDirectory);
-			return di.GetDirectories ();
+			var di = new DirectoryInfo(serverDirectory);
+			return di.GetDirectories();
 		}
 
-		private FileInfo[] GetExistingJars ()
+		private FileInfo[] GetExistingJars()
 		{
-			var di = new DirectoryInfo (jarDirectory);
-			return di.GetFiles ();
+			var di = new DirectoryInfo(jarDirectory);
+			return di.GetFiles();
 		}
 
-		private void DownloadServerJar(string jarUrl){
-			using (var wc = new WebClient ()) {
+		private void DownloadServerJar(string jarUrl)
+		{
+			using (var wc = new WebClient()) {
 				wc.DownloadFile(jarUrl, jarDirectory + "/" + jarUrl.Substring(jarUrl.LastIndexOf('/')));
 			}
 		}
 
-		public string GetHomePath ()
+		private void SetUpDirectories()
 		{
 			string homePath;
+			string dataDirectory = "dirtworld";
 
 			if (Environment.OSVersion.Platform == PlatformID.Unix ||
 			    Environment.OSVersion.Platform == PlatformID.MacOSX) {
-				homePath = Environment.GetEnvironmentVariable ("HOME");
+				homePath = Environment.GetEnvironmentVariable("HOME");
 			} else {
-				homePath = Environment.ExpandEnvironmentVariables ("%HOMEDRIVE%%HOMEPATH%");
+				homePath = Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
 			}
 
-			return homePath;
-		}
-
-		private void SetUpDirectories ()
-		{
-			serverDirectory = Directory.CreateDirectory (GetHomePath () + "/minecraft_servers").FullName;
-			jarDirectory = Directory.CreateDirectory (serverDirectory + "/server_jars").FullName;
-		}
-
-		public string CreateServerDirectory (string serverName)
-		{
-			var serverPath = GetHomePath () + "/minecraft_servers/" + serverName.Replace (" ", "_");
-			return Directory.CreateDirectory (serverPath).FullName;
+			serverDirectory = Directory.CreateDirectory(homePath + "/" + dataDirectory + "/server").FullName;
+			jarDirectory = Directory.CreateDirectory(homePath + "/" + dataDirectory + "/server_jars").FullName;
 		}
 
 		static void DataReceived(object sender, EventArgs e)
 		{
-			Console.WriteLine ("got me some data");
+			Console.WriteLine("got me some data");
 		}
 	}
 }

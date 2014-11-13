@@ -2,6 +2,7 @@
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Net;
 
 namespace DirtWorld
 {
@@ -47,6 +48,12 @@ namespace DirtWorld
 		public ServerProperties Properties { get; set; }
 
 		public string Directory { get; set; }
+
+		public UserList WhiteList { get; set; }
+
+		public UserList Ops { get; set; }
+
+		public UserList BannedPlayers { get; set; }
 
 		#endregion
 
@@ -130,6 +137,15 @@ namespace DirtWorld
 
 		}
 
+		public static string GetUserProfile (string userId)
+		{
+			string profile = "";
+			using(var wc = new WebClient()) {
+				profile = wc.DownloadString ("https://api.mojang.com/users/profiles/minecraft/" + userId);
+			}
+			return profile;
+		}
+
 		#endregion
 
 		#region Constructors
@@ -137,6 +153,10 @@ namespace DirtWorld
 		public Server (string directory)
 		{
 			Directory = directory;
+
+			// if server exists, load data. 
+			// else create new directory and associated files.
+
 			Name = "minecraft server";
 			MaxMemory = 1024;
 			InitialMemory = 1024;

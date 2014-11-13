@@ -4,8 +4,20 @@ using System.Collections.ObjectModel;
 
 namespace DirtWorld
 {
-	public class WhiteList
+	public class UserList
 	{
+		#region Properties
+
+		public string Path{ get; private set; }
+
+		public ReadOnlyCollection<User> Users {
+			get {
+				return new List<User> ().AsReadOnly ();
+			}
+		}
+
+		#endregion
+
 		#region Methods
 
 		public void AddUser (string userId)
@@ -18,14 +30,7 @@ namespace DirtWorld
 
 		}
 
-		public ReadOnlyCollection<User> Users {
-			get {
-				return new List<User> ().AsReadOnly ();
-			}
-		}
-
-
-		private void Save ()
+		public void Save ()
 		{
 
 		}
@@ -34,8 +39,9 @@ namespace DirtWorld
 
 		#region Constructors
 
-		public WhiteList (string serverName)
+		public UserList (string path)
 		{
+			this.Path = path;
 		}
 
 		#endregion

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace DirtWorld
 {
@@ -16,9 +17,13 @@ namespace DirtWorld
 
 		#region Methods
 
-		public void GetProfile ()
+		public static string GetProfile (string userId)
 		{
-
+			string profile = "";
+			using(var wc = new WebClient()) {
+				profile = wc.DownloadString ("https://api.mojang.com/users/profiles/minecraft/" + userId);
+			}
+			return profile;
 		}
 
 		#endregion

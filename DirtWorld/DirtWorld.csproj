@@ -52,8 +52,6 @@
     <Compile Include="ServerProperties.cs" />
     <Compile Include="WebInterface.cs" />
     <Compile Include="Server.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="UserList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -23,9 +23,9 @@ namespace DirtWorld
 			SetUpDirectories();
 
 			Get["/{name?}"] = parameters => {
-				var u = new User("jimmy"){Uuid = "test-uuid", Legacy = true};
+				var u = new {name = "magumbo", uuid = "test-uuid", legacy = true};
 				return "Welcome to DirtWorld " + parameters.name + 
-					"\nUser: " + u.ToJson();
+					"\nUser: " + new Nancy.Json.JavaScriptSerializer().Serialize(u);
 			};
 
 			Get["/start"] = parameters => {
@@ -41,12 +41,14 @@ namespace DirtWorld
 			};
 
 			Get["/jars"] = parameters => {
-				var wl = new UserList(serverDirectory + "/test.list");
+				server = new Server(serverDirectory);
+				var wl = server.GetWhiteList();
 				dynamic user = new ExpandoObject();
 				user.name = "bob";
 				user.uuid = "sljflskfjk";
 					user.legacy = true;
-				wl.AddUser(user);
+				wl.Add(user);
+				server.SaveWhiteList(wl);
 
 				var jars = GetExistingJars().Select(x => x.Name);
 

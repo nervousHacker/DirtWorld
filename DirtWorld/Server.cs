@@ -9,22 +9,24 @@ namespace DirtWorld
 	public class Server
 	{
 		#region Event Handlers
+
 		public event DataReceivedEventHandler DataReceived;
 		public event DataReceivedEventHandler ErrorReceived;
 
-		protected virtual void OnDataReceived (DataReceivedEventArgs e)
+		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
 			if (DataReceived != null) {
-				DataReceived (this, e);
+				DataReceived(this, e);
 			}
 		}
 
-		protected virtual void OnErrorReceived (DataReceivedEventArgs e)
+		protected virtual void OnErrorReceived(DataReceivedEventArgs e)
 		{
 			if (ErrorReceived != null) {
-				ErrorReceived (this, e);
+				ErrorReceived(this, e);
 			}
 		}
+
 		#endregion
 
 		#region Properties
@@ -49,23 +51,17 @@ namespace DirtWorld
 
 		public string Directory { get; set; }
 
-		public UserList WhiteList { get; set; }
-
-		public UserList Ops { get; set; }
-
-		public UserList BannedPlayers { get; set; }
-
 		#endregion
 
-		#region Methods
+		#region Public Methods
 
-		public void Start ()
+		public void Start()
 		{
-			this.Process = new Process ();
+			this.Process = new Process();
 			this.Process.StartInfo.WorkingDirectory = this.Directory;
 			this.Process.StartInfo.FileName = "java";
-			this.Process.StartInfo.Arguments = String.Format ("-jar -Xmx{0}M -Xms{1}M {3} {4}",
-				this.MaxMemory, this.InitialMemory, this.Jar, this.Gui);
+			this.Process.StartInfo.Arguments = String.Format("-jar -Xmx{0}M -Xms{1}M {3} {4}",
+			                                                  this.MaxMemory, this.InitialMemory, this.Jar, this.Gui);
 
 			this.Process.StartInfo.UseShellExecute = false;
 
@@ -75,89 +71,158 @@ namespace DirtWorld
 			this.Process.ErrorDataReceived += ErrorReceived;
 			this.Process.OutputDataReceived += DataReceived;
 
-			this.IsRunning = this.Process.Start ();
+			this.IsRunning = this.Process.Start();
 
-			this.Process.BeginOutputReadLine ();
-			this.Process.BeginErrorReadLine ();
+			this.Process.BeginOutputReadLine();
+			this.Process.BeginErrorReadLine();
 		}
 
-		public void Stop ()
+		public void Stop()
 		{
-			this.Process.StandardInput.WriteLine ("stop");
-			this.Process.Close ();
-			this.Process.Dispose ();
+			this.Process.StandardInput.WriteLine("stop");
+			this.Process.Close();
+			this.Process.Dispose();
 
 			this.IsRunning = this.Process.HasExited;
 		}
 
-		public void Restart ()
+		public void Restart()
 		{
-			Stop ();
-			Start ();
+			Stop();
+			Start();
 		}
 
-		public void Backup ()
+		public void Backup()
 		{
 			// check out sharpziplib
 		}
 
-		public void SetEula (bool agree)
+		public void SetEula(bool agree)
 		{
 			var filePath = this.Directory + "/eula.txt";
 			string[] eula;
 
-			if (File.Exists (filePath)) {
-				eula = File.ReadAllLines (filePath);
+			if (File.Exists(filePath)) {
+				eula = File.ReadAllLines(filePath);
 
 				for (int i = 0; i < eula.Length; i++) {
-					if (eula [i].StartsWith ("eula=")) {
-						eula [i] = agree ? "eula=true" : "eula=false";
+					if (eula[i].StartsWith("eula=")) {
+						eula[i] = agree ? "eula=true" : "eula=false";
 					}
 				}
 			} else {
 				eula = new string[1];
-				eula [0] = agree ? "eula=true" : "eula=false";
+				eula[0] = agree ? "eula=true" : "eula=false";
 			}
 
-			File.WriteAllLines (filePath, eula);
+			File.WriteAllLines(filePath, eula);
 		}
 
-		public void LoadServerProperties ()
+		public void LoadServerProperties()
 		{
-			this.Properties.Load (this.Directory);
+			this.Properties.Load(this.Directory);
 		}
 
-		public void SaveServerProperties ()
+		public void SaveServerProperties()
 		{
-			this.Properties.Save (this.Directory);
+			this.Properties.Save(this.Directory);
 		}
 
-		public void SendCommand ()
+		public void SaveWhiteList(List<dynamic> players)
+		{
+			SaveJsonObects(this.Directory + "/whitelist.json", players);
+		}
+
+		public List<dynamic> GetWhiteList()
+		{
+			return GetJsonObjects(this.Directory + "/whilelist.json");
+		}
+
+		public void SaveOps(List<dynamic> players)
+		{
+			SaveJsonObects(this.Directory + "/ops.json", players);
+		}
+
+		public List<dynamic> GetOps()
+		{
+			return GetJsonObjects(this.Directory + "/ops.json");
+		}
+
+		public void SaveBannedPlayers(List<dynamic> players)
+		{
+			SaveJsonObects(this.Directory + "/banned-players.json", players);
+		}
+
+		public List<dynamic> GetBannedPlayers()
+		{
+			return GetJsonObjects(this.Directory + "/banned-players.json");
+		}
+
+
+		public void SendCommand()
 		{
 
 		}
 
-		public static string GetUserProfile (string userId)
+		public static string GetUserProfile(string userId)
 		{
 			string profile = "";
-			using(var wc = new WebClient()) {
-				profile = wc.DownloadString ("https://api.mojang.com/users/profiles/minecraft/" + userId);
+			using (var wc = new WebClient()) {
+				profile = wc.DownloadString("https://api.mojang.com/users/profiles/minecraft/" + userId);
 			}
 			return profile;
+		}
+			
+		#endregion
+
+		#region Private Methods
+		private void SaveUserCache(List<dynamic> players)
+		{
+			SaveJsonObects(this.Directory + "/usercache.json", players);
+		}
+
+		private List<dynamic> GetUserCache()
+		{
+			return GetJsonObjects(this.Directory + "/usercache.json");
+		}
+
+		private List<dynamic> GetJsonObjects(string filePath)
+		{
+			List<dynamic> jsonObjects;
+			string jsonString = null;
+
+			if (File.Exists(filePath)) {
+				jsonString = File.ReadAllText(filePath);	 
+			}
+
+			if (jsonString != null) {
+				jsonObjects = new Nancy.Json.JavaScriptSerializer().DeserializeObject(jsonString) as List<dynamic>;		
+			}
+			else {
+				jsonObjects = new List<dynamic>();
+			}
+
+			return jsonObjects;
+		}
+
+		private void SaveJsonObects(string filePath, List<dynamic> jsonObjects)
+		{
+			var jsonString = new Nancy.Json.JavaScriptSerializer().Serialize(jsonObjects);
+			File.WriteAllText(filePath, jsonString);
 		}
 
 		#endregion
 
 		#region Constructors
 
-		public Server (string directory)
+		public Server(string directory)
 		{
 			Directory = directory;
 
 			// if server exists, load data. 
 			// else create new directory and associated files.
 
-			Name = "minecraft server";
+			Name = "server";
 			MaxMemory = 1024;
 			InitialMemory = 1024;
 			Gui = "nogui";

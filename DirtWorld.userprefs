@@ -1,16 +1,20 @@
-﻿<Properties>
+﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="DirtWorld/WebInterface.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="DirtWorld/UserList.cs">
     <Files>
       <File FileName="DirtWorld/Program.cs" Line="1" Column="1" />
-      <File FileName="DirtWorld/WebInterface.cs" Line="24" Column="24" />
-      <File FileName="DirtWorld/Server.cs" Line="1" Column="1" />
+      <File FileName="DirtWorld/WebInterface.cs" Line="38" Column="38" />
+      <File FileName="DirtWorld/Server.cs" Line="18" Column="18" />
       <File FileName="DirtWorld/Content/index.html" Line="1" Column="1" />
-      <File FileName="DirtWorld/ServerProperties.cs" Line="1" Column="1" />
+      <File FileName="DirtWorld/ServerProperties.cs" Line="4" Column="4" />
+      <File FileName="DirtWorld/UserList.cs" Line="21" Column="21" />
+      <File FileName="DirtWorld/User.cs" Line="18" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/stum/Projects/DirtWorld/DirtWorld/UserList.cs" line="47" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

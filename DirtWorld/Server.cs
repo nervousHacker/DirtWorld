@@ -157,8 +157,7 @@ namespace DirtWorld
 		{
 			return GetJsonObjects(this.Directory + "/banned-players.json");
 		}
-
-
+			
 		public void SendCommand()
 		{
 
@@ -176,6 +175,7 @@ namespace DirtWorld
 		#endregion
 
 		#region Private Methods
+
 		private void SaveUserCache(List<dynamic> players)
 		{
 			SaveJsonObects(this.Directory + "/usercache.json", players);

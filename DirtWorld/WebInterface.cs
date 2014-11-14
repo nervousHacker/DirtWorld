@@ -43,11 +43,7 @@ namespace DirtWorld
 			Get["/jars"] = parameters => {
 				server = new Server(serverDirectory);
 				var wl = server.GetWhiteList();
-				dynamic user = new ExpandoObject();
-				user.name = "bob";
-				user.uuid = "sljflskfjk";
-					user.legacy = true;
-				wl.Add(user);
+
 				server.SaveWhiteList(wl);
 
 				var jars = GetExistingJars().Select(x => x.Name);

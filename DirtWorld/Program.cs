@@ -9,12 +9,9 @@ namespace DirtWorld
 	{
 		public static void Main (string[] args)
 		{
-   
             var uri = new Uri ("http://localhost:1234");
             var hostConfig = new HostConfiguration();
             hostConfig.UrlReservations.CreateAutomatically = true;
-
-
 
             using (var host = new NancyHost(hostConfig, uri))
             {

@@ -9,7 +9,7 @@ namespace DirtWorld
 	{
 		public static void Main (string[] args)
 		{
-            var uri = new Uri ("http://localhost:1234");
+            var uri = new Uri ("http://127.0.0.1:1234");
             var hostConfig = new HostConfiguration();
             hostConfig.UrlReservations.CreateAutomatically = true;
 

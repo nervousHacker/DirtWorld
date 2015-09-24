@@ -1,9 +1,51 @@
-﻿
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<title></title>
+		<link rel="stylesheet" href="/Content/Styles/reset.css" />
+		<style type="text/css">
+			body{
+				background-color:#000;
+				color:#B18A3B;
+				text-align:center;
+			}
+		
+			#mainContainer{
+				width:60%;
+				border:1px solid #236A6A;
+				border-radius:6px;
+				padding:20px;
+				margin:0px auto;
+			}
+		</style>
+		<script>
+			var source;
+			if(!!window.EventSource) {
+				source = new EventSource("127.0.0.1:1234/serverEvent");	
+				source.addEventListener('message', function(evt) {
+					alert(evt.data);
+				}, false);
+
+				source.addEventListener('open', function(evt) {
+					console.log('connection is open');
+				}, false);
+
+				source.addEventListener('error', function(evt) {
+
+				}, false);
+			}
+			else {
+				alert("no supports");
+			}
+		</script>
 	</head>
 	<body>
-	Hello there
+		<header>
+			<img src="/Content/Images/DirtWorld.png" />
+		</header>
+		<section id="mainContainer">
+			No server found.
+		</section>
+
 	</body>
 </html>

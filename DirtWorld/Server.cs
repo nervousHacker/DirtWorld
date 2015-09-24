@@ -60,7 +60,7 @@ namespace DirtWorld
 			this.Process = new Process();
 			this.Process.StartInfo.WorkingDirectory = this.Directory;
 			this.Process.StartInfo.FileName = "java";
-			this.Process.StartInfo.Arguments = String.Format("-jar -Xmx{0}M -Xms{1}M {3} {4}",
+			this.Process.StartInfo.Arguments = String.Format("-jar -Xmx{0}M -Xms{1}M {2} {3}",
 			                                                  this.MaxMemory, this.InitialMemory, this.Jar, this.Gui);
 
 			this.Process.StartInfo.UseShellExecute = false;

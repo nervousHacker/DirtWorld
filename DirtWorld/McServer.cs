@@ -6,7 +6,7 @@ using System.Net;
 
 namespace DirtWorld
 {
-	public class Server
+	public class McServer
 	{
 		#region Event Handlers
 
@@ -47,7 +47,7 @@ namespace DirtWorld
 
 		public DateTime LastBackup { get; set; }
 
-		public ServerProperties Properties { get; set; }
+		public McServerProperties Properties { get; set; }
 
 		public string Directory { get; set; }
 
@@ -80,10 +80,10 @@ namespace DirtWorld
 		public void Stop()
 		{
 			this.Process.StandardInput.WriteLine("stop");
+			this.Process.CloseMainWindow();
+			this.IsRunning = this.Process.HasExited;
 			this.Process.Close();
 			this.Process.Dispose();
-
-			this.IsRunning = this.Process.HasExited;
 		}
 
 		public void Restart()
@@ -163,6 +163,18 @@ namespace DirtWorld
 
 		}
 
+		public string GetJarName()
+		{
+			var jar = "";
+			var di = new DirectoryInfo(Directory);
+			foreach(var fi in di.GetFiles()) {
+				if (fi.Name.Contains("minecraft_server") && fi.Name.EndsWith(".jar")) {
+					jar = fi.Name;
+				}
+			}
+			return jar;
+		}
+
 		public static string GetUserProfile(string userId)
 		{
 			string profile = "";
@@ -215,7 +227,7 @@ namespace DirtWorld
 
 		#region Constructors
 
-		public Server(string directory)
+		public McServer(string directory)
 		{
 			Directory = directory;
 

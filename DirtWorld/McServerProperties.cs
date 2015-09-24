@@ -7,7 +7,7 @@ using System.IO;
 
 namespace DirtWorld
 {
-	public class ServerProperties
+	public class McServerProperties
 	{
 		#region Enums
 		public enum Difficulties
@@ -421,7 +421,7 @@ namespace DirtWorld
 		#endregion
 
 		#region Constructors
-		public ServerProperties()
+		public McServerProperties()
 		{
 			_properties = new Dictionary<string, string>();
 			_properties.Add("allow-flight", "false");
@@ -465,7 +465,7 @@ namespace DirtWorld
 			_properties.Add("white-list", "true");
 		}
 
-		public ServerProperties(string[] configLines)
+		public McServerProperties(string[] configLines)
 			: base()
 		{
 			string[] kvp;

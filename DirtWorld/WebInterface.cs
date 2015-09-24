@@ -13,7 +13,7 @@ namespace DirtWorld
 {
 	public class WebInterface : NancyModule
 	{
-		private static Server server;
+		private static McServer server;
 		private static string serverDirectory;
 		private static string jarDirectory;
 		private static string defaultJarUrl = "https://s3.amazonaws.com/Minecraft.Download/versions/1.8/minecraft_server.1.8.jar";
@@ -62,9 +62,14 @@ namespace DirtWorld
 					// return the message.
 				}
 
-				server = new Server (serverDirectory);
+				server = new McServer (serverDirectory);
 				server.Name = parameters.name;
 				server.SetEula (true);
+
+				if(String.IsNullOrEmpty(server.GetJarName())) {
+					var jar = GetExistingJars().Where(x=> x.Name.Contains("minecraft_server")).First();
+					File.Copy(jar.FullName, server.Directory + "/" + jar.Name);
+				}
 
 				server.DataReceived += (sender, args) => {
 					Console.WriteLine (args.Data);
@@ -75,7 +80,8 @@ namespace DirtWorld
 
 			Get ["/stop"] = parameters => {
 				//StopServer ();
-				return "stopping server";
+				server.Stop();
+				return "Server Stopped";
 			};
 
 			Get ["/test"] = parameters => {

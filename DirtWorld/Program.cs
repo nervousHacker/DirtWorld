@@ -1,6 +1,8 @@
 ﻿using System;
+using Owin;
+using Microsoft.Owin.Hosting;
 using Nancy;
-using Nancy.Hosting.Self;
+using Nancy.Owin;
 using System.IO;
 
 namespace DirtWorld
@@ -9,19 +11,24 @@ namespace DirtWorld
 	{
 		public static void Main (string[] args)
 		{
-            var uri = new Uri ("http://127.0.0.1:1234");
-            var hostConfig = new HostConfiguration();
-            hostConfig.UrlReservations.CreateAutomatically = true;
+            var url = "http://127.0.0.1:1234";
 
-            using (var host = new NancyHost(hostConfig, uri))
-            {
-                StaticConfiguration.DisableErrorTraces = false;
-                host.Start();
-                Console.WriteLine("Server started at " + uri.ToString());
-                Console.WriteLine("Press \'q\' to close the server.");
-                while (Console.Read() != 'q') ;
-            }
+			using (WebApp.Start<Startup>(url))
+			{
+				Console.WriteLine("Server started at " + url);
+				Console.WriteLine("Press \'q\' to close the server.");
+				while (Console.Read() != 'q') ;
+			}
 		}
 
+	}
+
+	public class Startup
+	{
+		public void Configuration(IAppBuilder app)
+		{
+			app.UseNancy();
+			Nancy.StaticConfiguration.DisableErrorTraces = false;
+		}
 	}
 }
